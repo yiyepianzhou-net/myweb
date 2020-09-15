@@ -34,6 +34,7 @@ namespace myweb
             //{
             //    c.UseLoggerFactory(efLogger).UseSqlServer(Configuration["connection:str"]);
             //}, poolSize: 64);
+
             services.AddDbContext<MywebDbcontext>(c => c.UseSqlServer(Configuration["connection:str"]).UseLoggerFactory(efLogger).AddInterceptors(new HintCommandInterceptor()));
         }
 

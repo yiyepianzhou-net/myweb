@@ -4,27 +4,23 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using myweb.Models;
+using WebApplication1.Models;
 
-namespace myweb.Controllers
+namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ILogger<HomeController> _logger;
 
-        private readonly MywebDbcontext mywebDbcontext;
-       
-        public HomeController(MywebDbcontext mywebDbcontext)
+        public HomeController(ILogger<HomeController> logger)
         {
-           this.mywebDbcontext = mywebDbcontext;
+            _logger = logger;
         }
 
         public IActionResult Index()
         {
-            var sql = mywebDbcontext.users.Where(c =>EF.Functions.Like(c.UserName,"user2")).ToList();
-            return View(new List<demo>() { new demo() { Name = "ace", Salary = 0 }, new demo() { Name = "ace", Salary = 0 } });
+            return View();
         }
 
         public IActionResult Privacy()
@@ -37,11 +33,5 @@ namespace myweb.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-    }
-
-    public class demo {
-        public string Name { get; set; }
-
-        public decimal Salary { get; set; }
     }
 }

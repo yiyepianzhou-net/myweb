@@ -1,8 +1,24 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables/datatables.min.js"></script>
+<script src="~/js/vue.js"></script>
+@model List<myweb.Controllers.demo>
+<div id="demo">
+    <table id="table" class="table table-bordered"></table>
+</div>  
+<Script>
+    new Vue({
+        el: '#demo',
+        mounted: function () {
+            //$(document).ready(function () {
+            $('#table').DataTable({
+                columns: [
+                    { "data": 'name' ,"title":"姓名"},
+                    { "data": 'salary', "title": "薪资" },
+                ], data: @Model
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+            });
+            //});
+        }
+    });
+
+</Script>

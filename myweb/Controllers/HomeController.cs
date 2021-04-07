@@ -1,47 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using Abp.ZeroCore.SampleApp.Core;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using myweb.Models;
 
 namespace myweb.Controllers
 {
     public class HomeController : Controller
     {
-
-        private readonly MywebDbcontext mywebDbcontext;
-       
-        public HomeController(MywebDbcontext mywebDbcontext)
+        private readonly TenantManager tenantManager;
+        private readonly RoleManager roleManager;
+        public HomeController(TenantManager tenantManager, RoleManager roleManager)
         {
-           this.mywebDbcontext = mywebDbcontext;
+            this.tenantManager = tenantManager;
+            this.roleManager = roleManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var sql = mywebDbcontext.users.Where(c =>EF.Functions.Like(c.UserName,"user2")).ToList();
-            return View(new List<demo>() { new demo() { Name = "ace", Salary = 0 }, new demo() { Name = "ace", Salary = 0 } });
+            var role = new Role() { Name = "role1" };
+            await roleManager.CreateAsync(role);
+            //var tenant = new Tenant("tenancyName2", "admin2");
+            //await tenantManager.CreateAsync(tenant);
+            await tenantManager.DbContext.SaveChangesAsync();
+            return Ok();
         }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-    }
-
-    public class demo {
-        public string Name { get; set; }
-
-        public decimal Salary { get; set; }
     }
 }

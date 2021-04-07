@@ -8,8 +8,8 @@ namespace AsyncTaskAndForEarch
         static void Main(string[] args)
         {
 
-           
-    
+
+
         }
 
         public void synchronization()
@@ -21,7 +21,7 @@ namespace AsyncTaskAndForEarch
 
     public class asyncTest : IEnumerable, IEnumerator
     {
-        private  readonly int[] a = new int[10] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        private readonly int[] a = new int[10] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
         private int top = -1;
         object IEnumerator.Current => a[top];
@@ -42,7 +42,7 @@ namespace AsyncTaskAndForEarch
             top = -1;
         }
 
-        public  void Print()
+        public void Print()
         {
             foreach (var item in this)
                 System.Console.WriteLine(item);

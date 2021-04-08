@@ -92,6 +92,7 @@ namespace myweb
         public void ConfigureContainer(ContainerBuilder builder)
         {
             #region 准备工作
+
             #region 多租户
             builder.RegisterType<SimpleDbContextProvider<SampleAppDbContext>>().As<IDbContextProvider<SampleAppDbContext>>();
             builder.RegisterType<TenantRepository>().As<IRepository<Tenant>>();

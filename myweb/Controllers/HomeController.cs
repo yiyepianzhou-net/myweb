@@ -1,6 +1,5 @@
 ﻿using Abp.ZeroCore.SampleApp.Core;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace myweb.Controllers
@@ -9,19 +8,21 @@ namespace myweb.Controllers
     {
         private readonly TenantManager tenantManager;
         private readonly RoleManager roleManager;
-        public HomeController(TenantManager tenantManager, RoleManager roleManager)
+        private readonly UserManager userManager;
+        public HomeController(TenantManager tenantManager, RoleManager roleManager, UserManager userManager)
         {
             this.tenantManager = tenantManager;
             this.roleManager = roleManager;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var role = new Role() { Name = "role1" };
-            await roleManager.CreateAsync(role);
-            //var tenant = new Tenant("tenancyName2", "admin2");
-            //await tenantManager.CreateAsync(tenant);
-            await tenantManager.DbContext.SaveChangesAsync();
+            var user = new User() { TenantId = 1, Name = "admin", UserName = "admin" ,EmailAddress="xsxsx",Surname="admin",Password="xxx"};
+           await userManager.CreateAsync(user);
+            //var role = new Role() { Name = "role1",DisplayName="displayName" };
+            //await roleManager.CreateAsync(role);
+            //await tenantManager.DbContext.SaveChangesAsync();
             return Ok();
         }
     }

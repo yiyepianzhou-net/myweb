@@ -2,6 +2,8 @@ using Abp.Application.Editions;
 using Abp.Application.Features;
 using Abp.Authorization;
 using Abp.Authorization.Roles;
+using Abp.Authorization.Users;
+using Abp.Configuration;
 using Abp.Configuration.Startup;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
@@ -12,6 +14,7 @@ using Abp.Organizations;
 using Abp.Runtime.Caching;
 using Abp.Runtime.Caching.Configuration;
 using Abp.Runtime.Caching.Memory;
+using Abp.Runtime.Session;
 using Abp.Zero.Configuration;
 using Abp.ZeroCore.SampleApp.Class;
 using Abp.ZeroCore.SampleApp.Core;
@@ -26,6 +29,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Repositorys;
+using System;
 
 namespace myweb
 {
@@ -119,6 +123,32 @@ namespace myweb
             builder.RegisterType<OrganizationUnitRepository>().As<IRepository<OrganizationUnit, long>>();
             builder.RegisterType<OrganizationUnitRoleRepository>().As<IRepository<OrganizationUnitRole, long>>();
             builder.RegisterType<RoleManager>().AsSelf().PropertiesAutowired();
+            #endregion
+
+            #region UserStore
+            builder.RegisterType<UserRepository>().As<IRepository<User, long>>();
+            builder.RegisterType<UserRoleRepository>().As<IRepository<UserRole, long>>();
+            builder.RegisterType<UserLoginRepository>().As<IRepository<UserLogin, long>>();
+            builder.RegisterType<UserClaimRepository>().As<IRepository<UserClaim, long>>();
+            builder.RegisterType<UserPermissionSettingRepository>().As<IRepository<UserPermissionSetting, long>>();
+            builder.RegisterType<UserOrganizationUnitRepository>().As<IRepository<UserOrganizationUnit, long>>();
+            builder.RegisterType<UserStore>().AsSelf().PropertiesAutowired();
+            #endregion
+
+            #region 用户管理
+            builder.RegisterType<AbpSession>().As<IAbpSession>();
+            builder.RegisterType<IdentityOptions>().AsSelf();
+            builder.RegisterType<PasswordHasher<User>>().As<IPasswordHasher<User>>();
+            builder.RegisterType<UserValidator<User>>().As<IUserValidator<User>>();
+            builder.RegisterType<PasswordValidator<User>>().As<IPasswordValidator<User>>();
+            builder.RegisterType<UserOrganizationUnitRepository>().As<IRepository<UserOrganizationUnit, long>>();
+            builder.RegisterType<OrganizationUnitSettings>().As<IOrganizationUnitSettings>();
+            builder.RegisterType<Abp.ZeroCore.SampleApp.Class.SettingManager>().As<ISettingManager>();
+            builder.RegisterType<UserManager>().AsSelf().PropertiesAutowired();
+            #endregion
+
+            #region setingManager
+             
             #endregion
             #endregion
         }

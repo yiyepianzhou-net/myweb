@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Abp.Application.Editions;
@@ -64,6 +65,29 @@ namespace Abp.ZeroCore.SampleApp.Core
             settingManager)
         {
         }
+
+        public override IQueryable<User> Users => base.Users.Include(c => c.Roles).Include(c => c.Permissions);
+
+        public override async Task<IdentityResult> CreateAsync(User user)
+        {
+            var result = await CheckDuplicateUsernameOrEmailAddressAsync(user.Id, user.UserName, user.EmailAddress);
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+
+           int? tenantId = 1;
+            if (tenantId.HasValue && !user.TenantId.HasValue)
+            {
+                user.TenantId = tenantId.Value;
+            }
+
+            await InitializeOptionsAsync(user.TenantId);
+
+            return await base.CreateAsync(user);
+            //return base.CreateAsync(user);
+        }
+
     }
 
     public class TenantManager : AbpTenantManager<Tenant, User>

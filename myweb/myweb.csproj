@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210408054032_set4.cs" />
+    <Compile Remove="Migrations\20210408054032_set4.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.AspNetCore" Version="6.3.0" />
     <PackageReference Include="Abp.RedisCache" Version="6.3.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
     <PackageReference Include="Elasticsearch.Net" Version="7.11.1" />

@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace Abp.ZeroCore.SampleApp.Repositorys
 {
-   public class RolePermissionSettingResitorys: EfCoreRepositoryBase<SampleAppDbContext, RolePermissionSetting, long>, IRepository<RolePermissionSetting, long>
+   public class RolePermissionSettingRepository: EfCoreRepositoryBase<SampleAppDbContext, RolePermissionSetting, long>, IRepository<RolePermissionSetting, long>
     {
-        public RolePermissionSettingResitorys(IDbContextProvider<SampleAppDbContext> dbContextProvider) : base(dbContextProvider) { }
+        public RolePermissionSettingRepository(IDbContextProvider<SampleAppDbContext> dbContextProvider) : base(dbContextProvider) { }
     }
 }

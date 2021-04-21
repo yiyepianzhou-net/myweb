@@ -18,21 +18,16 @@ using Abp.Runtime;
 using Abp.Runtime.Caching;
 using Abp.Runtime.Remoting;
 using Abp.Runtime.Session;
-using Abp.Zero;
-using Abp.Zero.Configuration;
-using Abp.ZeroCore.SampleApp;
+using Abp.Zero.EntityFrameworkCore;
 using Abp.ZeroCore.SampleApp.Core;
 using Abp.ZeroCore.SampleApp.EntityFramework;
-using Abp.ZeroCore.SampleApp.Repositorys;
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Repositorys;
 using System.Linq;
 using System.Reflection;
 
@@ -86,21 +81,36 @@ namespace myweb
             var sample = Assembly.Load("Abp.ZeroCore.SampleApp");
             var zero = Assembly.Load("Abp");
             var asp = Assembly.Load("Microsoft.Extensions.Identity.Core");
+            var core = Assembly.Load("Microsoft.AspNetCore.Identity");
             var common = Assembly.Load("Abp.Zero.Common");
+            var Ef = Assembly.Load("Abp.ZeroCore.EntityFrameworkCore");
+            var abpef = Assembly.Load("Abp.EntityFrameworkCore");
             #region Manager
-            //builder.RegisterType<DataContextAmbientScopeProvider<SessionOverride>>().As<IAmbientScopeProvider<SessionOverride>>();
+
+            builder.RegisterType<TenantCache<Tenant, User>>().As<ITenantCache>();
             builder.RegisterType<SimpleDbContextProvider<SampleAppDbContext>>().As<IDbContextProvider<SampleAppDbContext>>();
 
-            builder.RegisterAssemblyTypes(zero).Where(t => t.GetConstructors().Any(c => c.IsPublic) /*&& !t.Name.EndsWith("IocResolver")*/)
-             .AsImplementedInterfaces().AsSelf();
+            builder.RegisterAssemblyTypes(zero).Where(t => t.GetConstructors().Any(c => c.IsPublic)).AsSelf().AsImplementedInterfaces();
 
-            builder.RegisterAssemblyTypes(sample, zero).Where(t => t.GetConstructors().Any(c => c.IsPublic)).AsSelf().AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(sample, zero).Where(t =>t.GetConstructors().Any(c => c.IsPublic)).AsSelf().AsImplementedInterfaces().PropertiesAutowired();
 
             builder.RegisterAssemblyTypes(asp).Where(t => t.GetConstructors().Any(c => c.IsPublic)).AsSelf().AsImplementedInterfaces();
 
             builder.RegisterAssemblyTypes(common).Where(t => t.GetConstructors().Any(c => c.IsPublic)).AsSelf().AsImplementedInterfaces();
 
-            builder.RegisterType<IocManager>().As<IIocManager>().As<IIocResolver>();
+            builder.RegisterAssemblyTypes(core).Where(t => t.GetConstructors().Any(c => c.IsPublic)).AsSelf().AsImplementedInterfaces();
+
+            builder.RegisterAssemblyTypes(Ef).Where(t => t.GetConstructors().Any(c => c.IsPublic)).AsSelf().AsImplementedInterfaces();
+
+            builder.RegisterAssemblyTypes(abpef).Where(t => t.GetConstructors().Any(c => c.IsPublic)).AsImplementedInterfaces().AsSelf(); 
+
+            builder.RegisterType<IocManager>().As<IIocManager>().As<IIocResolver>().PropertiesAutowired();
+
+            builder.RegisterType<AsyncLocalCurrentUnitOfWorkProvider>().As<ICurrentUnitOfWorkProvider>();
+
+            builder.RegisterType<DataContextAmbientScopeProvider<SessionOverride>>().As<IAmbientScopeProvider<SessionOverride>>();
+
+            builder.RegisterType<DataContextAmbientScopeProvider<bool>>().As<IAmbientScopeProvider<bool>>();
             #endregion
             #endregion
         }

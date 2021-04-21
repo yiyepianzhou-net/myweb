@@ -1,9 +1,7 @@
-﻿using Abp.Authorization.Users;
+﻿using Abp.Authorization;
+using Abp.ZeroCore.SampleApp.Application;
 using Abp.ZeroCore.SampleApp.Core;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace myweb.Controllers
@@ -12,6 +10,7 @@ namespace myweb.Controllers
     {
         private readonly TenantManager tenantManager;
         private readonly RoleManager roleManager;
+        private readonly UserManager userManager;
         public HomeController(TenantManager tenantManager, RoleManager roleManager)
         {
             this.tenantManager = tenantManager;
@@ -20,8 +19,12 @@ namespace myweb.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var user = new User() { TenantId = 1, Name = "admin", UserName = "admin", EmailAddress = "xsxsx", Surname = "admin", Password = "xxx" };
+            //await userManager.CreateAsync(Abp.ZeroCore.SampleApp.Core.User.CreateTenantAdminUser(1,"XXX"));
+            /*oleManager.SetGrantedPermissionsAsync();*/
+            //var user = Abp.ZeroCore.SampleApp.Core.User.CreateTenantAdminUser(1, "xxx");
+            //user.Name = "admin1";
             //await userManager.CreateAsync(user);
+            //await userManager.AddToRoleAsync(user,"role1");
             return Ok();
         }
     }
